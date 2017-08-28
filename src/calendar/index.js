@@ -163,6 +163,7 @@ class Calendar extends Component {
             key={id}
             state={state}
             theme={this.props.theme}
+            day={day}
             onPress={this.pressDay.bind(this, day)}
             marked={this.getDateMarking(day)}
             markingExists={markingExists}
@@ -186,12 +187,20 @@ class Calendar extends Component {
     }
   }
 
-  renderWeek(days, id) {
-    const week = [];
+  renderWeek(days, id, isLast) {
+    const week = [],
+          style = isLast
+            ? [this.style.week, this.style.weekBottom]
+            : this.style.week;
     days.forEach((day, id2) => {
       week.push(this.renderDay(day, id2));
     }, this);
-    return (<View style={this.style.week} key={id}>{week}</View>);
+
+    return (
+        <View style={style} key={id}>
+            {week}
+        </View>
+    );
   }
 
   render() {
@@ -199,7 +208,8 @@ class Calendar extends Component {
     const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
     const weeks = [];
     while (days.length) {
-      weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
+        const isLast = days.length <= 7;
+        weeks.push(this.renderWeek(days.splice(0, 7), weeks.length, isLast));
     }
     let indicator;
     const current = parseDate(this.props.current);
@@ -222,8 +232,11 @@ class Calendar extends Component {
           renderArrow={this.props.renderArrow}
           monthFormat={this.props.monthFormat}
         />
-        {weeks}
-      </View>);
+        <View style={this.style.weeks}>
+            {weeks}
+        </View>
+      </View>
+    );
   }
 }
 

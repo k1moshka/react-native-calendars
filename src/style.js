@@ -21,6 +21,9 @@ export const textDayFontSize = 16;
 export const textMonthFontSize = 16;
 export const textDayHeaderFontSize = 13;
 
+export const textDayHeaderWeekendColor = '#6B6B6B';
+export const textDayWeekendColor = '#6B6B6B';
+
 export const calendarBackground = foregroundColor;
 export const textSectionTitleColor = '#b6c1cd';
 export const selectedDayBackgroundColor = textLinkColor;

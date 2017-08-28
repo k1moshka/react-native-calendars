@@ -66,6 +66,9 @@ export default function styleConstructor(theme={}) {
     },
     naText: {
       color: '#b6c1cd'
+    },
+    weekendText: {
+      color: appStyle.textDayWeekendColor,
     }
   });
 }

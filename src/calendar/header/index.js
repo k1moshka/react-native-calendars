@@ -91,9 +91,19 @@ class CalendarHeader extends Component {
           {rightArrow}
         </View>
         <View style={this.style.week}>
-          {weekDaysNames.map((day, idx) => (
-            <Text key={idx} style={this.style.dayHeader}>{day}</Text>
-          ))}
+          {
+              weekDaysNames.map((day, idx) => {
+                  const dayOfWeek = (idx + this.props.firstDay) % 7,
+                        isWeekEnd = dayOfWeek === 6 || dayOfWeek === 0
+                        style = isWeekEnd
+                            ? [this.style.dayHeader, this.style.dayHeaderWeekend]
+                            : this.style.dayHeader;
+
+                  return (
+                    <Text key={idx} style={style}>{day}</Text>
+                  );
+              })
+          }
         </View>
       </View>
     );

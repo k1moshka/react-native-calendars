@@ -46,6 +46,9 @@ export default function styleConstructor(theme={}) {
     },
     selectedDot: {
       backgroundColor: appStyle.selectedDotColor
+    },
+    weekendText: {
+      color: appStyle.textDayWeekendColor,
     }
   });
 }

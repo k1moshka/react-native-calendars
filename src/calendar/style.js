@@ -11,11 +11,21 @@ export default function getStyle(theme={}) {
       backgroundColor: appStyle.calendarBackground
     },
     week: {
-      marginTop: 7,
-      marginBottom: 7,
+      paddingTop: 10,
+      paddingBottom: 20,
       flexDirection: 'row',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
+      borderBottomWidth: 1,
+      borderBottomColor: '#E0E0E0'
+    },
+    weekBottom: {
+        borderBottomWidth: 0
+    },
+    weeks: {
+      paddingLeft: 16,
+      paddingRight: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: '#E0E0E0'
     }
   });
 }
-

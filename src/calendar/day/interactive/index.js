@@ -171,6 +171,12 @@ class Day extends Component {
           <View style={[this.style.rightFiller, rightFillerStyle]}/>
         </View>
       );
+    }  else {
+      const day = this.props.day.getDay(),
+            isWeekEnd = day === 0 || day === 6;
+      if (isWeekEnd) {
+          textStyle.push(this.style.weekendText);
+      }
     }
 
     return (
