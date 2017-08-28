@@ -2,19 +2,16 @@
   "name": "react-native-calendars",
   "version": "1.5.8",
   "main": "src/index.js",
-  "description": "React Native Calendar Components",
+  "description": "React Native Calendar Components With Fixes for IDA",
   "scripts": {
     "test": "jasmine src/*.spec.js && npm run lint",
     "lint": "eslint src/ example/src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wix/react-native-calendars"
+    "url": "git+https://github.com/k1moshka/react-native-calendars"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "author": "Wix.com",
+  "author": "Ilya Melishnikov",
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.5.10",
