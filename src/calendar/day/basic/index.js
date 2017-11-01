@@ -55,7 +55,11 @@ class Day extends Component {
     }
 
     if (this.props.state === 'selected' || marked.selected) {
-      containerStyle.push(this.style.selected);
+      if (marked.marked) {
+          containerStyle.push(this.style.selectedWithMarks);
+      } else {
+          containerStyle.push(this.style.selected);
+      }
       dotStyle.push(this.style.selectedDot);
       textStyle.push(this.style.selectedText);
     } else if (this.props.state === 'disabled' || marked.disabled) {

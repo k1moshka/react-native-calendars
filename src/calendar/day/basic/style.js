@@ -24,6 +24,10 @@ export default function styleConstructor(theme={}) {
       backgroundColor: appStyle.selectedDayBackgroundColor,
       borderRadius: 16
     },
+    selectedWithMarks: {
+        backgroundColor: appStyle.selectedMarkedDayBackgroundColor,
+        borderRadius: 16,
+    },
     todayText: {
       color: appStyle.todayTextColor
     },
