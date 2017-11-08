@@ -107,8 +107,6 @@ class Calendar extends Component {
     }
 
     addMonth(count, isFromArrow = false) {
-        console.log('add month', count);
-
         if (isFromArrow) {
             this.refs.swiper.change(count === -1);
         } else {
@@ -279,10 +277,11 @@ class Calendar extends Component {
                     firstDay={this.props.firstDay}
                     renderArrow={this.props.renderArrow}
                     monthFormat={this.props.monthFormat}
-                    animationDuration={200}
+                    animationDuration={350}
                 />
                 <Swiper
                     ref="swiper"
+                    successCapture={0.4}
                     animationDuration={450}
                     renderLeft={this.renderContent(-1)}
                     renderCenter={this.renderContent()}
@@ -290,7 +289,6 @@ class Calendar extends Component {
                     onChangePage={(toLeft) => this.addMonth(toLeft ? -1 : 1)}
                 />
             </View>
-
         );
     }
 }
