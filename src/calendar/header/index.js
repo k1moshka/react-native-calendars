@@ -110,11 +110,11 @@ class CalendarHeader extends Component {
     }
 
     addMonth() {
-        this.props.addMonth(1);
+        this.props.addMonth(1, true);
     }
 
     substractMonth() {
-        this.props.addMonth(-1);
+        this.props.addMonth(-1, true);
     }
 
     render() {
@@ -171,21 +171,6 @@ class CalendarHeader extends Component {
                         {indicator}
                     </Animated.View>
                     {rightArrow}
-                </View>
-                <View style={this.style.week}>
-                    {
-                        weekDaysNames.map((day, idx) => {
-                            const dayOfWeek = (idx + this.props.firstDay) % 7,
-                                isWeekEnd = dayOfWeek === 6 || dayOfWeek === 0,
-                                style = isWeekEnd
-                                    ? [this.style.dayHeader, this.style.dayHeaderWeekend]
-                                    : this.style.dayHeader;
-
-                            return (
-                                <Text key={idx} style={style}>{day}</Text>
-                            );
-                        })
-                    }
                 </View>
             </View>
         );

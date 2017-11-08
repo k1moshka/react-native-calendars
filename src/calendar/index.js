@@ -4,11 +4,12 @@ import React, {
 import {
     View,
     ViewPropTypes,
+    Text
 } from 'react-native';
 import PropTypes from 'prop-types';
 
 import XDate from 'xdate';
-import dateutils from '../dateutils';
+import dateutils, { weekDayNames } from '../dateutils';
 import {
     xdateToData,
     parseDate
@@ -18,6 +19,7 @@ import Day from './day/basic';
 import UnitDay from './day/interactive';
 import CalendarHeader from './header';
 import shouldComponentUpdate from './updater';
+import Swiper from './swiper/Swiper';
 
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
@@ -104,8 +106,14 @@ class Calendar extends Component {
         }
     }
 
-    addMonth(count) {
-        this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+    addMonth(count, isFromArrow = false) {
+        console.log('add month', count);
+
+        if (isFromArrow) {
+            this.refs.swiper.change(count === -1);
+        } else {
+            this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+        }
     }
 
     isSelected(day) {
@@ -152,21 +160,22 @@ class Calendar extends Component {
         });
     }
 
-    renderDay(day, id) {
+    renderDay(day, id, monthOffset = 0) {
         const minDate = parseDate(this.props.minDate);
         const maxDate = parseDate(this.props.maxDate);
+        const currentMonth = this.state.currentMonth.clone().addMonths(monthOffset);
         let state = '';
         if (this.isSelected(day)) {
             state = 'selected';
         } else if ((minDate && !dateutils.isGTE(day, minDate)) || (maxDate && !dateutils.isLTE(day, maxDate))) {
             state = 'disabled';
-        } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
+        } else if (!dateutils.sameMonth(day, currentMonth)) {
             state = 'disabled';
         } else if (dateutils.sameDate(day, XDate())) {
             state = 'today';
         }
         let dayComp;
-        if (!dateutils.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
+        if (!dateutils.sameMonth(day, currentMonth) && this.props.hideExtraDays) {
             if (this.props.markingType === 'interactive') {
                 dayComp = (<View key={id} style={{flex: 1}} />);
             } else {
@@ -192,13 +201,34 @@ class Calendar extends Component {
         return dayComp;
     }
 
-    renderWeek(days, id, isLast) {
+    renderWeekDays() {
+        const weekDaysNames = weekDayNames(this.props.firstDay);
+        return (
+            <View style={this.style.weekDayNames} key="weekdays">
+                {
+                    weekDaysNames.map((day, idx) => {
+                        const dayOfWeek = (idx + this.props.firstDay) % 7,
+                            isWeekEnd = dayOfWeek === 6 || dayOfWeek === 0,
+                            style = isWeekEnd
+                                ? [this.style.dayHeader, this.style.dayHeaderWeekend]
+                                : this.style.dayHeader;
+
+                        return (
+                            <Text key={idx} style={style}>{day}</Text>
+                        );
+                    })
+                }
+            </View>
+        );
+    }
+
+    renderWeek(days, id, isLast, monthOffset = 0) {
         const week = [],
             style = isLast
                 ? [this.style.week, this.style.weekBottom]
                 : this.style.week;
         days.forEach((day, id2) => {
-            week.push(this.renderDay(day, id2));
+            week.push(this.renderDay(day, id2, monthOffset));
         }, this);
 
         return (
@@ -208,14 +238,26 @@ class Calendar extends Component {
         );
     }
 
-    render() {
-        //console.log('render calendar ');
-        const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
+    renderContent = (offset = 0) => () => {
+        const month = this.state.currentMonth.clone().addMonths(offset, false);
+        const days = dateutils.page(month, this.props.firstDay);
         const weeks = [];
         while (days.length) {
             const isLast = days.length <= 7;
-            weeks.push(this.renderWeek(days.splice(0, 7), weeks.length, isLast));
+            weeks.push(this.renderWeek(days.splice(0, 7), weeks.length, isLast, offset));
         }
+
+        return (
+            [
+                this.renderWeekDays(),
+                <View style={this.style.weeks} key="weeks">
+                    {weeks}
+                </View>
+            ]
+        );
+    }
+
+    render() {
         let indicator;
         const current = parseDate(this.props.current);
         if (current) {
@@ -225,6 +267,7 @@ class Calendar extends Component {
                 indicator = true;
             }
         }
+
         return (
             <View style={[this.style.container, this.props.style]}>
                 <CalendarHeader
@@ -236,11 +279,18 @@ class Calendar extends Component {
                     firstDay={this.props.firstDay}
                     renderArrow={this.props.renderArrow}
                     monthFormat={this.props.monthFormat}
+                    animationDuration={200}
                 />
-                <View style={this.style.weeks}>
-                    {weeks}
-                </View>
+                <Swiper
+                    ref="swiper"
+                    animationDuration={450}
+                    renderLeft={this.renderContent(-1)}
+                    renderCenter={this.renderContent()}
+                    renderRight={this.renderContent(1)}
+                    onChangePage={(toLeft) => this.addMonth(toLeft ? -1 : 1)}
+                />
             </View>
+
         );
     }
 }
