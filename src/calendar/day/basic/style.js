@@ -7,10 +7,14 @@ export default function styleConstructor(theme={}) {
     base: {
       width: 32,
       height: 32,
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    dayWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     text: {
-      marginTop: 4,
       fontSize: appStyle.textDayFontSize,
       fontFamily: appStyle.textDayFontFamily,
       fontWeight: '300',
@@ -42,7 +46,9 @@ export default function styleConstructor(theme={}) {
       height: 4,
       marginTop: 1,
       borderRadius: 2,
-      opacity: 0
+      opacity: 0,
+      position: 'absolute',
+      bottom: -10
     },
     visibleDot: {
       opacity: 1,
