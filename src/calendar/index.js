@@ -70,8 +70,15 @@ class Calendar extends Component {
 
         indicator: PropTypes.node,
 
-        onRefresh: PropTypes.func
+        onRefresh: PropTypes.func,
+        onBeginTouch: PropTypes.func,
+        onReleaseTouch: PropTypes.func,
+        canHandleTouch: PropTypes.bool
     };
+
+    static defaultProps = {
+        canHandleTouch: true
+    }
 
     constructor(props) {
         super(props);
@@ -296,7 +303,9 @@ class Calendar extends Component {
                         }
                     ]}
                 >
-                    <Icon style={this.style.indicatorIcon} name="refresh" size={26} color="white" />
+                    <View style={this.style.indicatorWrapper}>
+                        <Icon style={this.style.indicatorIcon} name="refresh" size={26} color="white" />
+                    </View>
                 </Animated.View>
                 <CalendarHeader
                     theme={this.props.theme}
@@ -318,7 +327,9 @@ class Calendar extends Component {
                     renderRight={this.renderContent(1)}
                     onChangePage={(toLeft) => this.addMonth(toLeft ? -1 : 1)}
                     refreshThrottle={70}
-                    indicator={this.props.indicator}
+                    canHandleTouch={this.props.canHandleTouch}
+                    onBeginTouch={this.props.onBeginTouch}
+                    onReleaseTouch={this.props.onReleaseTouch}
                     onIndicatorMove={this.handleIndicatorMove}
                     onIndicatorDispose={this.handleIndicatorDispose}
                     onRefresh={this.props.onRefresh}

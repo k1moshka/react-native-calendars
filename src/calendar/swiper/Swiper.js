@@ -29,7 +29,10 @@ export default class Swiper extends PureComponent {
         onIndicatorDispose: PropTypes.func,
         // on pull to refresh action
         onRefresh: PropTypes.func,
-
+        // on begin pan responder processing
+        onBeginTouch: PropTypes.func,
+        // on release pan responder processing
+        onReleaseTouch: PropTypes.func,
         // accessibility toggles
         canSwipeToLeft: PropTypes.bool,
         canSwipeToRight: PropTypes.bool,
@@ -37,7 +40,8 @@ export default class Swiper extends PureComponent {
         animationDuration: PropTypes.number,
         // styles
         blockStyle: PropTypes.any,
-        containerStyle: PropTypes.any
+        containerStyle: PropTypes.any,
+        canHandleTouch: PropTypes.bool
     }
 
     static defaultProps = {
@@ -47,12 +51,15 @@ export default class Swiper extends PureComponent {
         onRefresh: undefined,
         onIndicatorMove: undefined,
         onIndicatorDispose: undefined,
+        onBeginTouch: undefined,
+        onReleaseTouch: undefined,
         indicator: undefined,
         canSwipeToRight: true,
         canSwipeToLeft: true,
         animationDuration: 200,
         blockStyle: undefined,
-        containerStyle: undefined
+        containerStyle: undefined,
+        canHandleTouch: true
     }
 
     static SWITCH_TYPE = {
@@ -83,8 +90,8 @@ export default class Swiper extends PureComponent {
         };
         this._panHelper = panHelper;
         this._panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onPanResponderTerminationRequest: () => true,
+            onStartShouldSetPanResponder: () => this.props.canHandleTouch,
+            onPanResponderTerminationRequest: () => this.props.canHandleTouch,
             onPanResponderGrant: () => {
                 if (!panHelper.isAnimationPlaying) {
                     panHelper.startGestureX = this.state.translateX._value;
@@ -92,6 +99,10 @@ export default class Swiper extends PureComponent {
 
                 this.state.translateX.stopAnimation((value) => { panHelper.endGestureX = value; });
                 panHelper.isAnimationPlaying = false;
+
+                if (this.props.onBeginTouch) {
+                    this.props.onBeginTouch();
+                }
             },
             onPanResponderRelease: () => {
                 const startGestureX = panHelper.startGestureX;
@@ -149,10 +160,14 @@ export default class Swiper extends PureComponent {
 
                 panHelper.isGesturing = false;
                 panHelper.gesture = Swiper.GESTURE.NONE;
+
+                if (this.props.onReleaseTouch) {
+                    this.props.onReleaseTouch();
+                }
             },
             onPanResponderMove: (evt, gestureState) => {
                 const { dx, dy } = gestureState;
-
+                
                 if (panHelper.isGesturing) {
                     const { gesture } = panHelper;
 

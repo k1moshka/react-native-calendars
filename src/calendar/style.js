@@ -58,10 +58,10 @@ export default function getStyle(theme = {}) {
             justifyContent: 'center',
             alignItems: 'center'
         },
-        indicatorIcon: {
+        indicatorWrapper: {
             backgroundColor: 'rgba(231,76,60,1)',
-            padding: 3,
-            borderRadius: 24
-        }
+            borderRadius: 26,
+            padding: 5
+        },
     });
 }
