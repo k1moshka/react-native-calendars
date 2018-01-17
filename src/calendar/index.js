@@ -4,9 +4,11 @@ import React, {
 import {
     View,
     ViewPropTypes,
-    Text
+    Text,
+    Animated
 } from 'react-native';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import XDate from 'xdate';
 import dateutils, { weekDayNames } from '../dateutils';
@@ -64,7 +66,11 @@ class Calendar extends Component {
         // Replace default arrows with custom ones (direction can be 'left' or 'right')
         renderArrow: PropTypes.func,
         // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-        monthFormat: PropTypes.string
+        monthFormat: PropTypes.string,
+
+        indicator: PropTypes.node,
+
+        onRefresh: PropTypes.func
     };
 
     constructor(props) {
@@ -77,7 +83,9 @@ class Calendar extends Component {
             currentMonth = props.selected && props.selected[0] ? parseDate(props.selected[0]) : XDate();
         }
         this.state = {
-            currentMonth
+            currentMonth,
+            indicatorInitialPosition: -60,
+            indicatorPosition: new Animated.Value(-60),
         };
 
         this.updateMonth = this.updateMonth.bind(this);
@@ -156,6 +164,18 @@ class Calendar extends Component {
                 }
             }
         });
+    }
+
+    handleIndicatorMove = (dy) => {
+        const { indicatorPosition, indicatorInitialPosition } = this.state;
+
+        indicatorPosition.setValue(indicatorInitialPosition + dy);
+    }
+
+    handleIndicatorDispose = () => {
+        const { indicatorPosition, indicatorInitialPosition } = this.state;
+
+        indicatorPosition.setValue(indicatorInitialPosition);
     }
 
     renderDay(day, id, monthOffset = 0) {
@@ -268,6 +288,16 @@ class Calendar extends Component {
 
         return (
             <View style={[this.style.container, this.props.style]}>
+                <Animated.View
+                    style={[
+                        this.style.indicator,
+                        {
+                            transform: [{ translateY: this.state.indicatorPosition }]
+                        }
+                    ]}
+                >
+                    <Icon style={this.style.indicatorIcon} name="refresh" size={26} color="white" />
+                </Animated.View>
                 <CalendarHeader
                     theme={this.props.theme}
                     hideArrows={this.props.hideArrows}
@@ -287,6 +317,11 @@ class Calendar extends Component {
                     renderCenter={this.renderContent()}
                     renderRight={this.renderContent(1)}
                     onChangePage={(toLeft) => this.addMonth(toLeft ? -1 : 1)}
+                    refreshThrottle={70}
+                    indicator={this.props.indicator}
+                    onIndicatorMove={this.handleIndicatorMove}
+                    onIndicatorDispose={this.handleIndicatorDispose}
+                    onRefresh={this.props.onRefresh}
                 />
             </View>
         );

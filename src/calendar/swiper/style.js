@@ -21,6 +21,9 @@ export default {
         flex: 1,
         flexDirection: 'row',
 	},
+	indicatorWrapper: {
+		
+	},
     block: (translateX = 0, style) => calc({
         height: '100%',
         width: '100%',

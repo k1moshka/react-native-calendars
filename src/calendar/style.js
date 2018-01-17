@@ -9,8 +9,6 @@ export default function getStyle(theme = {}) {
     };
     return StyleSheet.create({
         container: {
-            // paddingLeft: 5,
-            // paddingRight: 5,
             flex: 1,
             backgroundColor: appStyle.calendarBackground
         },
@@ -50,6 +48,20 @@ export default function getStyle(theme = {}) {
         },
         dayHeaderWeekend: {
             color: appStyle.textDayHeaderWeekendColor,
+        },
+        indicator: {
+            zIndex: 100,
+            elevation: 1,
+            position: 'absolute',
+            width: '100%',
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        indicatorIcon: {
+            backgroundColor: 'rgba(231,76,60,1)',
+            padding: 3,
+            borderRadius: 24
         }
     });
 }
