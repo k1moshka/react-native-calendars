@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, {Component} from 'react';
 import {
   TouchableOpacity,
@@ -35,6 +36,46 @@ class Day extends Component {
     }, false);
   }
 
+  renderPeriods(marking) {
+    const baseDotStyle = [this.style.dot, this.style.visibleDot];
+    if (
+      marking.periods &&
+      Array.isArray(marking.periods) &&
+      marking.periods.length > 0
+    ) {
+      // Filter out dots so that we we process only those items which have key and color property
+      const validPeriods = marking.periods.filter(d => d && d.color);
+      return validPeriods.map((period, index) => {
+        const style = [
+          {
+            height: 3,
+            marginVertical: 1,
+            opacity: 1,
+            backgroundColor: period.color,
+          },
+        ];
+        if (period.startingDay) {
+          style.push({
+            borderTopLeftRadius: 2,
+            borderBottomLeftRadius: 2,
+            marginLeft: 4,
+            width: '100%'
+          });
+        }
+        if (period.endingDay) {
+          style.push({
+            borderTopRightRadius: 2,
+            borderBottomRightRadius: 2,
+            marginRight: 4,
+            width: '100%'
+          });
+        }
+        return <View key={index} style={style} />;
+      });
+    }
+    return;
+  }
+
   render() {
     const containerStyle = [this.style.base];
     const textStyle = [this.style.text];
@@ -49,7 +90,7 @@ class Day extends Component {
     let dot;
     if (marked.marked) {
       dotStyle.push(this.style.visibleDot);
-      dot = (<View style={dotStyle}/>);
+      dot = (<View style={dotStyle} />);
     } else if (!this.props.markingExists) {
       textStyle.push(this.style.alignedText);
     }
@@ -80,6 +121,13 @@ class Day extends Component {
           <Text style={textStyle}>{String(this.props.children)}</Text>
         </TouchableOpacity>
         {dot}
+        <View
+          style={{
+            alignSelf: 'stretch',
+          }}
+        >
+          {this.renderPeriods(marked)}
+        </View>
       </View>
     );
   }

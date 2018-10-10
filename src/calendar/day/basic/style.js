@@ -13,6 +13,7 @@ export default function styleConstructor(theme={}) {
     dayWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
+      flex: 1
     },
     text: {
       fontSize: appStyle.textDayFontSize,
