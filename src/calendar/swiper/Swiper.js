@@ -91,7 +91,8 @@ export default class Swiper extends PureComponent {
         this._panHelper = panHelper;
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => this.props.canHandleTouch,
-            onPanResponderTerminationRequest: () => this.props.canHandleTouch,
+            onPanResponderTerminationRequest: () => true,
+            onStartShouldSetPanResponderCapture: () => false,
             onPanResponderGrant: () => {
                 if (!panHelper.isAnimationPlaying) {
                     panHelper.startGestureX = this.state.translateX._value;
@@ -167,7 +168,7 @@ export default class Swiper extends PureComponent {
             },
             onPanResponderMove: (evt, gestureState) => {
                 const { dx, dy } = gestureState;
-                
+
                 if (panHelper.isGesturing) {
                     const { gesture } = panHelper;
 

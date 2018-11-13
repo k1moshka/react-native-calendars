@@ -295,18 +295,6 @@ class Calendar extends Component {
 
         return (
             <View style={[this.style.container, this.props.style]}>
-                <Animated.View
-                    style={[
-                        this.style.indicator,
-                        {
-                            transform: [{ translateY: this.state.indicatorPosition }]
-                        }
-                    ]}
-                >
-                    <View style={this.style.indicatorWrapper}>
-                        <Icon style={this.style.indicatorIcon} name="refresh" size={26} color="white" />
-                    </View>
-                </Animated.View>
                 <CalendarHeader
                     theme={this.props.theme}
                     hideArrows={this.props.hideArrows}
