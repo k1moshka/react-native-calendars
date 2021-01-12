@@ -152,7 +152,7 @@ class CalendarHeader extends Component {
         }
         let indicator;
         if (this.props.showIndicator) {
-            indicator = <ActivityIndicator />;
+            indicator = <ActivityIndicator color="#EE5555" />;
         }
         return (
             <View>
