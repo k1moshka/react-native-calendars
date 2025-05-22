@@ -23,9 +23,6 @@ import CalendarHeader from './header';
 import shouldComponentUpdate from './updater';
 import Swiper from './swiper/Swiper';
 
-//Fallback when RN version is < 0.44
-const viewPropTypes = ViewPropTypes || View.propTypes;
-
 class Calendar extends Component {
     static propTypes = {
         // Specify theme properties to override specific styles for calendar parts. Default = {}
@@ -34,7 +31,7 @@ class Calendar extends Component {
         markedDates: PropTypes.object,
 
         // Specify style for calendar container element. Default = {}
-        style: viewPropTypes.style,
+        style: PropTypes.object,
 
         selected: PropTypes.array,
 
@@ -123,7 +120,7 @@ class Calendar extends Component {
 
     addMonth(count, isFromArrow = false) {
         if (isFromArrow) {
-            this.refs.swiper.change(count === -1);
+            this.swiper.change(count === -1);
         } else {
             this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
         }
@@ -303,7 +300,7 @@ class Calendar extends Component {
                     animationDuration={350}
                 />
                 <Swiper
-                    ref="swiper"
+                    ref={(node) => { this.swiper = node }}
                     successCapture={0.4}
                     animationDuration={450}
                     renderLeft={this.renderContent(-1)}
